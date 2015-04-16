@@ -42,6 +42,29 @@ namespace StatsdClient
 			_statsD.Send<Statsd.Gauge>(BuildNamespacedStatName(statName), value);
 		}
 
+        public static void IncrementGauge(string statName, double value)
+        {
+            if (_statsD == null)
+            {
+                return;
+            }
+
+            _statsD.Send<Statsd.Gauge>(BuildNamespacedStatName(statName), Operators.Increment, +value);
+        }
+
+
+        public static void DecrementGauge(string statName, double value)
+        {
+            if (_statsD == null)
+            {
+                return;
+            }
+
+            _statsD.Send<Statsd.Gauge>(BuildNamespacedStatName(statName), Operators.Decrement, value);
+        }
+
+
+
 		public static void Timer(string statName, int value, double sampleRate = 1)
 		{
 			if (_statsD == null)

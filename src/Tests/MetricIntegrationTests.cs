@@ -272,7 +272,29 @@ namespace Tests
             Metrics.Gauge("gauge", value);
             Assert.That(LastPacketMessageReceived(), Is.EqualTo("gauge:12345678901234600000.000000000000000|g"));
         }
-        
+
+
+        [Test]
+        public void increment_gauge_with_double_value()
+        {
+            Metrics.Configure(_defaultMetricsConfig);
+
+            const double value = 12345678901234567890;
+            Metrics.IncrementGauge("gauge", value);
+            Assert.That(LastPacketMessageReceived(), Is.EqualTo("gauge:+12345678901234600000.000000000000000|g"));
+        }
+
+        [Test]
+        public void decrement_gauge_with_double_value()
+        {
+            Metrics.Configure(_defaultMetricsConfig);
+
+            const double value = 12345678901234567890;
+            Metrics.DecrementGauge("gauge", value);
+            Assert.That(LastPacketMessageReceived(), Is.EqualTo("gauge:-12345678901234600000.000000000000000|g"));
+        }
+
+
         [Test]
         public void gauge_with_double_value_with_floating_point()
         {

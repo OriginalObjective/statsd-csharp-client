@@ -75,6 +75,22 @@ namespace StatsdClient
             Send();
         }
 
+
+        public void Send<TCommandType>(string name, Operators operators, double value) where TCommandType : IAllowsDouble
+        {
+            if (operators == Operators.Increment)
+            {
+                Commands = new List<string> { GetCommand(name, String.Format(CultureInfo.InvariantCulture, "+{0:F15}", value), _commandToUnit[typeof(TCommandType)], 1) };
+            }
+            else
+            {
+                Commands = new List<string> { GetCommand(name, String.Format(CultureInfo.InvariantCulture, "-{0:F15}", value), _commandToUnit[typeof(TCommandType)], 1) };
+            }
+            Send();
+        }
+
+
+
         public void Add<TCommandType>(string name, int value) where TCommandType : IAllowsInteger
         {
 			ThreadSafeAddCommand(GetCommand(name, value.ToString(CultureInfo.InvariantCulture), _commandToUnit[typeof (TCommandType)], 1));
@@ -166,5 +182,7 @@ namespace StatsdClient
 	            }
 	        }
         }
+
+       
     }
 }
